@@ -1,16 +1,24 @@
 <?php
-	//kõik AB'iga seonduv
+
+	require_once("../configglobal.php");
+	require_once("User.class.php");
+	$database = "if15_romil_2";
+	session_start();
 	
-	// ühenduse loomiseks kasuta
+	
+	/*
+	//kÃµik AB'iga seonduv
+	
+	// Ã¼henduse loomiseks kasuta
 	require_once("../configglobal.php");
 	$database = "if15_romil_2";
 	
-	// paneme sessiooni käima, saame kasutada $_SESSION muutujaid
+	// paneme sessiooni kÃ¤ima, saame kasutada $_SESSION muutujaid
 	session_start();
 	
 	// lisame kasutaja ab'i
 	function createUser($create_email, $password_hash){
-		// globals on muutuja kõigist php failidest mis on ühendatud
+		// globals on muutuja kÃµigist php failidest mis on Ã¼hendatud
 		$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 		
 		$stmt = $mysqli->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
@@ -50,7 +58,7 @@
 	
 	
 	function createCarPlate($car_plate, $color){
-		// globals on muutuja kõigist php failidest mis on ühendatud
+		// globals on muutuja kÃµigist php failidest mis on Ã¼hendatud
 		$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 		
 		$stmt = $mysqli->prepare("INSERT INTO car_plates (user_id, number_plate, color) VALUES (?, ?, ?)");
@@ -59,11 +67,11 @@
 		$message = "";
 		
 		if($stmt->execute()){
-			// see on tõene siis kui sisestus ab'i õnnestus
+			// see on tÃµene siis kui sisestus ab'i Ãµnnestus
 			$message = "Edukalt sisestatud andmebaasi";
 			
 		}else{
-			// execute on false, miski läks katki
+			// execute on false, miski lÃ¤ks katki
 			echo $stmt->error;
 		}
 		
@@ -81,7 +89,7 @@
 		$string = "Tere ".$name;
 		return $string;
 		
-		// mis on pärast returni seda ei käivitata
+		// mis on pÃ¤rast returni seda ei kÃ¤ivitata
 		echo "hellooooo";
 		
 	}
