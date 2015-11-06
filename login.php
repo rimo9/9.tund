@@ -41,7 +41,7 @@
 				$password_hash = hash("sha512", $password);
 				
 				// functions php failis käivitan funktsiooni
-				loginUser($email, $password_hash);
+				$User->loginUser($email, $password_hash);
 			}
 		} // login if end
     // *********************
@@ -70,7 +70,7 @@
 				echo $password_hash;
 				
 				// functions.php failis käivina funktsiooni
-				createUser($create_email, $password_hash);
+				$User->createUser($create_email, $password_hash);
 				
 			}
     } // create if end
