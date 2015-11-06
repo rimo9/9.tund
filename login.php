@@ -42,6 +42,12 @@
 				
 				// functions php failis käivitan funktsiooni
 				$login_response = $User->loginUser($email, $password_hash);
+				if(isset($login_response->success)){
+					//läks edukalt, peab sessiooni salvestama
+					$_SESSION["id_from_db"] = $login_response->success->user->id;
+					$_SESSION["user_email"] = $login_response->success->user->email;
+					header("Location:data.php");
+				}
 			}
 		} // login if end
     // *********************

@@ -48,6 +48,21 @@ class User{
 	}
 	function loginUser($email, $password_hash){
 		$response = new StdClass();
+		$stmt = $this->connection->prepare("SELECT id, email FROM user_sample WHERE email=?");
+		$stmt->bind_param("s", $email);
+		$stmt->execute();
+		if(!$stmt->fetch()){
+			// saadan tagasi errori
+			$error = new StdClass();
+			$error->id = 2;
+			$error->message = "This email doesen't exist";
+			
+			//panen errori responsile külge
+			$response->error = $error;
+			// pärast returni enam koodi edasi ei vaadata funktsioonis
+			return $response;
+		}
+		$stmt->close();
 		$stmt = $this->connection->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
 		$stmt->bind_param("ss", $email, $password_hash);
 		$stmt->bind_result($id_from_db, $email_from_db);
@@ -55,11 +70,15 @@ class User{
 		if($stmt->fetch()){
 			$success = new StdClass();
 			$success->message = "Sucessfully logged in";
+			$user = new StdClass();
+			$user->id = $id_from_db;
+			$user->email = $email_from_db;
+			$success->user = $user;
 			$response->success = $success;
 		}else{
 			$error = new StdClass();
-			$error->id = 2;
-			$error->message = "Wrong username or password";
+			$error->id = 3;
+			$error->message = "Wrong password";
 			$response->error = $error;
 		}
 		$stmt->close();
