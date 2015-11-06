@@ -41,7 +41,7 @@
 				$password_hash = hash("sha512", $password);
 				
 				// functions php failis käivitan funktsiooni
-				$User->loginUser($email, $password_hash);
+				$login_response = $User->loginUser($email, $password_hash);
 			}
 		} // login if end
     // *********************
@@ -93,6 +93,11 @@
 <body>
 
   <h2>Log in</h2>
+  <?php if(isset($login_response->error)):?>
+  <p style="color:red;"><?=$login_response->error->message;?></p>
+  <?php elseif(isset($login_response->success)):?>
+  <p style="color:green;"><?=$login_response->success->message;?></p>
+  <?php endif;?>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?><br><br>
   	<input name="password" type="password" placeholder="Parool" value="<?php echo $password; ?>"> <?php echo $password_error; ?><br><br>
@@ -103,7 +108,7 @@
   <?php if(isset($create_response->error)):?>
   <p style="color:red;"><?=$create_response->error->message;?></p>
   <?php elseif(isset($create_response->success)):?>
-  <p styole="color:green;"><?=$create_response->success->message;?></p>
+  <p style="color:green;"><?=$create_response->success->message;?></p>
   <?php endif;?>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="create_email" type="email" placeholder="E-post" value="<?php echo $create_email; ?>"> <?php echo $create_email_error; ?><br><br>

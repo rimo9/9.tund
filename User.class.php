@@ -24,21 +24,45 @@ class User{
 			//peale returni koodi ei vaadata enam funktsioonis
 			return $response;
 		}
+		////////NB! - panen eelmise käsu kinni////////////
+		$stmt->close();
+		
 		$stmt = $this->connection->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
 		$stmt->bind_param("ss", $create_email, $password_hash);
-		$stmt->execute();
+		if($stmt->execute()){
+			//salvestas edukalt
+			$success = new StdClass();
+			$success->message = "Sucessfully created new user";
+			$response->success = $success;
+		}else{
+			//ei läinud edukalt
+			//saadan errori
+			$error = new StdClass();
+			$error->id = 1;
+			$error->message = "Something broke";
+			//error responsele külge
+			$response->error = $error;
+		}
 		$stmt->close();
+		return $response;
 	}
 	function loginUser($email, $password_hash){
+		$response = new StdClass();
 		$stmt = $this->connection->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
 		$stmt->bind_param("ss", $email, $password_hash);
 		$stmt->bind_result($id_from_db, $email_from_db);
 		$stmt->execute();
 		if($stmt->fetch()){
-			echo "kasutaja id=".$id_from_db;
+			$success = new StdClass();
+			$success->message = "Sucessfully logged in";
+			$response->success = $success;
 		}else{
-			echo "Wrong password or email!";
+			$error = new StdClass();
+			$error->id = 2;
+			$error->message = "Wrong username or password";
+			$response->error = $error;
 		}
 		$stmt->close();
+		return $response;
 	}
 }?>
