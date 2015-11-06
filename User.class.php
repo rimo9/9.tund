@@ -8,6 +8,22 @@ class User{
 		$this->connection = $mysqli;
 	}
 	function createUser($create_email, $password_hash){
+		//objekt et saata tagasi kas errori(id,message) või success(message)
+		$response = new StdClass();
+		
+		$stmt = $this->connection->prepare("SELECT email FROM user_sample WHERE email = ?");
+		$stmt->bind_param("s", $create_email);
+		$stmt->execute();
+		if($stmt->fetch()){
+			//saadan errori
+			$error = new StdClass();
+			$error->id = 0;
+			$error->message = "email already used";
+			//error responsele külge
+			$response->error = $error;
+			//peale returni koodi ei vaadata enam funktsioonis
+			return $response;
+		}
 		$stmt = $this->connection->prepare("INSERT INTO user_sample (email, password) VALUES (?, ?)");
 		$stmt->bind_param("ss", $create_email, $password_hash);
 		$stmt->execute();
