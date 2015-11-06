@@ -6,6 +6,7 @@
 	if(isset($_SESSION["id_from_db"])){
 		// suunan data lehele
 		header("Location: data.php");
+		exit();
 	}
 	
   // muuutujad errorite jaoks
@@ -47,6 +48,10 @@
 					$_SESSION["id_from_db"] = $login_response->success->user->id;
 					$_SESSION["user_email"] = $login_response->success->user->email;
 					header("Location:data.php");
+					//
+					//NB! lõpetame php laadimise
+					//
+					exit();
 				}
 			}
 		} // login if end
